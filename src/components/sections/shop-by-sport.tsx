@@ -1,26 +1,9 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { sports } from "@/data/sports";
 import { px } from "@/lib/images";
 import { SectionHead } from "@/components/ui/primitives";
-import SocialCards, { type CardItem } from "@/components/ui/card-fan-carousel";
-
-/**
- * Built at module scope, not inline in the JSX: the carousel keys its layout
- * effect on the `cards` identity, so a fresh array each render would restart
- * the entry animation.
- *
- * Sources are 2200x3300 portraits. The centre card is 320px wide on desktop and
- * scales to 1.08 on hover, so w=900 (dpr=2 -> 1800px) is still ~2.5x oversampled
- * for a 3x display while being roughly half the bytes of the full-size asset.
- */
-const SPORT_CARDS: CardItem[] = sports.map((s) => ({
-  imgUrl: px(s.image, 900),
-  alt: `${s.name} — ${s.blurb}`,
-  linkUrl: `/${s.id}`,
-  title: s.name,
-  meta: `${s.productCount.toLocaleString("en-IN")}+ products`,
-}));
 
 export function ShopBySport() {
   return (
@@ -42,10 +25,42 @@ export function ShopBySport() {
             </Link>
           }
         />
-      </div>
 
-      <div className="mt-2 lg:mt-4">
-        <SocialCards cards={SPORT_CARDS} />
+        {/* One card per sport. The lead card spans both columns at sm so the
+            remaining four fill two clean rows instead of leaving an orphan. */}
+        <ul className="mt-10 grid gap-3 sm:grid-cols-2 lg:mt-12 lg:grid-cols-5 lg:gap-2.5">
+          {sports.map((s, i) => (
+            <li key={s.id} className={i === 0 ? "sm:col-span-2 lg:col-span-1" : ""}>
+              <Link
+                href={`/${s.id}`}
+                className="group relative flex h-[18rem] flex-col justify-end overflow-hidden rounded-[3px] bg-navy-900 p-5 sm:h-[20rem] lg:h-[24rem]"
+              >
+                <Image
+                  src={px(s.image, 900)}
+                  alt={`${s.name} — ${s.blurb}`}
+                  fill
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 20vw"
+                  className="object-cover transition-transform duration-700 ease-[var(--ease-out-expo)] group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/30 to-transparent" />
+
+                <div className="relative flex items-end justify-between gap-3">
+                  <div className="min-w-0">
+                    <h3 className="display text-[clamp(1.25rem,1.6vw,1.6rem)] text-white">
+                      {s.name}
+                    </h3>
+                    <p className="mt-1 text-[13px] text-white/65">
+                      {s.productCount.toLocaleString("en-IN")}+ products
+                    </p>
+                  </div>
+                  <span className="grid size-9 shrink-0 place-items-center rounded-full bg-white/12 text-white backdrop-blur-sm transition-colors duration-300 group-hover:bg-volt-500 group-hover:text-navy-900">
+                    <ArrowUpRight className="size-[17px]" strokeWidth={2} />
+                  </span>
+                </div>
+              </Link>
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   );

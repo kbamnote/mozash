@@ -38,30 +38,10 @@ src/
     sections/     hero, trust bar, sports, finder, trending, stringing, brands, guides, reviews
     commerce/     product card, radar chart
     graphics/     gear-art.tsx — the drawn racquet/paddle/shoe/string/bag system
-    ui/           button, primitives, card-fan-carousel (GSAP card fan)
+    ui/           button, primitives (price, rating, tag, swatches, section head)
   data/           products.ts, sports.ts, nav.ts  ← mock catalogue
   lib/            site.ts, types.ts, images.ts
 ```
-
-## Shop by Sport — the card fan
-
-`src/components/ui/card-fan-carousel.tsx` (GSAP) renders the five sport cards as a
-fanned hand. Two things it needs that do not live in the component:
-
-- **`.fan-card` / `.fan-layout` in `globals.css`.** The component references both but
-  ships neither. `.fan-card` must be absolutely positioned (GSAP stacks every card at
-  centre and translates outward) and centred with *margins*, not `translate(-50%,-50%)` —
-  GSAP writes `x`/`y` into `transform` and would overwrite it. `.fan-layout` reserves the
-  22/26/28/34/38rem the component's `getHeightMultiplier()` assumes.
-- **`--fan-lift`.** The outer cards are pushed down 7.3rem with nothing lifting them back,
-  so the fan renders low. The lift re-centres it; see the derivation in the CSS.
-
-Captions are centred because neighbouring cards overlap each card's *inner* edge, which
-swallows an edge-aligned caption on the right half of the fan.
-
-Known limitation: below 480px the component's own x-multiplier (0.28) leaves only ~67px
-of each card exposed, so the two inner captions are partly covered. The outer and centre
-captions read fine. Fixing it properly means a different layout under `sm`, not a tweak.
 
 ## Swapping in the backend
 
