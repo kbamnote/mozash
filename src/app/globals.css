@@ -1,26 +1,267 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+/* ------------------------------------------------------------------
+   MOZASH — design tokens
+   Palette supplied by client. Semantic names map onto the raw ramp so
+   a rebrand only ever touches the :root block below.
+------------------------------------------------------------------ */
+
+@theme {
+  /* raw brand ramp */
+  --color-navy-950: #060d18;
+  --color-navy-900: #0b1426;
+  --color-navy-800: #111f33;
+  --color-navy-700: #1a2b42;
+  --color-navy-600: #253a55;
+
+  --color-volt-400: #e4ff6e;
+  --color-volt-500: #d7ff3a;
+  --color-volt-600: #c2eb1f;
+  --color-volt-700: #a3c80f;
+
+  --color-clay-500: #ff6b3d;
+  --color-clay-600: #e8551f;
+
+  --color-bone-50: #fbfaf8;
+  --color-bone-100: #f6f5f1;
+  --color-bone-200: #eceae3;
+
+  --color-ink: #111111;
+  --color-charcoal: #2a2f3a;
+  --color-slate-muted: #6b7385;
+  --color-line: #e5e7eb;
+
+  /* type */
+  --font-display: var(--font-archivo), "Arial Narrow", sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  /* motion */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-quint: cubic-bezier(0.83, 0, 0.17, 1);
+
+  /* layout */
+  --spacing-gutter: 1.25rem;
+  --radius-card: 0.25rem;
+}
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* semantic */
+  --surface: #ffffff;
+  --surface-sunken: var(--color-bone-100);
+  --surface-inverse: var(--color-navy-900);
+
+  --fg: var(--color-ink);
+  --fg-muted: var(--color-slate-muted);
+  --fg-inverse: #ffffff;
+  --fg-inverse-muted: #9aa3b2;
+
+  --accent: var(--color-volt-500);
+  --accent-hover: var(--color-volt-600);
+  --accent-fg: var(--color-navy-900); /* volt NEVER carries white text */
+
+  --badge: var(--color-clay-500);
+  --badge-fg: #ffffff;
+
+  --rule: var(--color-line);
+  --rule-inverse: rgba(255, 255, 255, 0.12);
+
+  /* shadcn bridge — keeps any registry component on-brand */
+  --background: var(--surface);
+  --foreground: var(--fg);
+  --primary: var(--color-navy-900);
+  --primary-foreground: #ffffff;
+  --secondary: var(--color-bone-100);
+  --secondary-foreground: var(--color-navy-900);
+  --muted: var(--color-bone-100);
+  --muted-foreground: var(--color-slate-muted);
+  --border: var(--color-line);
+  --input: var(--color-line);
+  --ring: var(--color-volt-600);
+  --radius: 0.25rem;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@layer base {
+  * {
+    border-color: var(--rule);
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  html {
+    -webkit-tap-highlight-color: transparent;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: var(--surface);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    font-feature-settings: "cv11", "ss01";
+    font-variant-numeric: tabular-nums;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: var(--color-volt-500);
+    color: var(--color-navy-900);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-volt-600);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  /* Display lockup — wide, heavy, tight. The headline voice. */
+  .display {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-stretch: 112%;
+    text-transform: uppercase;
+    letter-spacing: -0.028em;
+    line-height: 0.92;
+  }
+
+  .eyebrow {
+    font-family: var(--font-sans);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .rule-label {
+    font-size: 0.625rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  /* Fine film grain — stops the big navy blocks reading as flat CSS */
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.035;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* Hairline grid used on the sport + spec blocks */
+  .hairline-grid {
+    background-image: linear-gradient(to right, var(--rule-inverse) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--rule-inverse) 1px, transparent 1px);
+    background-size: 64px 64px;
+  }
+}
+
+@utility shell {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 90rem;
+  padding-inline: 1.25rem;
+  @media (width >= 48rem) { padding-inline: 2rem; }
+  @media (width >= 80rem) { padding-inline: 3rem; }
+}
+
+@keyframes marquee-x {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* ------------------------------------------------------------------
+   card-fan-carousel
+
+   The component ships without these two classes but depends on both:
+   `.fan-card` must be absolutely positioned (GSAP stacks every card at
+   the centre and translates outward) and `.fan-layout` must reserve the
+   height that getHeightMultiplier() assumes — 22/26/28/34/38rem at
+   480/640/768/1024. Without them the fan collapses into a pile.
+
+   Centring uses margins, not translate(-50%,-50%): GSAP writes x/y into
+   `transform`, so a transform-based centre would be overwritten on the
+   first tween.
+------------------------------------------------------------------ */
+@layer components {
+  .fan-layout {
+    height: 22rem;
+  }
+
+  .fan-card {
+    --fan-w: 11rem;
+    --fan-h: 14.67rem;
+    /* The outer cards are pushed down by up to 7.3rem with nothing lifting them
+       back, so the fan renders low in its box and leaves dead space on top.
+       At rest the extents are cardH/2 up and (7.3rem + the rotated outer card's
+       half-height) down, so centring needs lift = (down - up) / 2. That solves
+       to 3.2rem at 1024 and 3.4rem at 320 -- near-constant, because the 7.3rem
+       push is a fixed length that does not scale with the card. One value. */
+    --fan-lift: 3.3rem;
+
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: var(--fan-w);
+    height: var(--fan-h);
+    margin-left: calc(var(--fan-w) / -2);
+    margin-top: calc(var(--fan-h) / -2 - var(--fan-lift));
+
+    border-radius: 0.5rem;
+    overflow: hidden;
+    background: var(--color-navy-900);
+    box-shadow:
+      0 2px 6px rgba(11, 20, 38, 0.12),
+      0 24px 56px -16px rgba(11, 20, 38, 0.45);
+    /* starts hidden; the entry tween sets opacity to 1 */
+    opacity: 0;
+    will-change: transform;
+    backface-visibility: hidden;
+  }
+
+  .fan-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 30;
+    border-radius: inherit;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
+    pointer-events: none;
+  }
+
+  .fan-card:focus-visible {
+    outline: 3px solid var(--color-volt-500);
+    outline-offset: 3px;
+  }
+
+  @media (width >= 30rem) {
+    .fan-layout { height: 26rem; }
+    .fan-card { --fan-w: 13rem; --fan-h: 17.33rem; }
+  }
+
+  @media (width >= 40rem) {
+    .fan-layout { height: 28rem; }
+    .fan-card { --fan-w: 15rem; --fan-h: 20rem; }
+  }
+
+  @media (width >= 48rem) {
+    .fan-layout { height: 34rem; }
+    .fan-card { --fan-w: 17rem; --fan-h: 22.67rem; }
+  }
+
+  @media (width >= 64rem) {
+    .fan-layout { height: 38rem; }
+    .fan-card { --fan-w: 20rem; --fan-h: 26.67rem; }
+  }
 }
