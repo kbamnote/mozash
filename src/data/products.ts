@@ -1,10 +1,14 @@
 import type { Product } from "@/lib/types";
+import { babolatRacquets } from "./babolat";
 
 /**
  * Demo catalogue. Shape matches the planned `GET /api/products` response so the
  * backend swap is a single fetch-layer change, not a component rewrite.
+ *
+ * These are invented products used to keep the homepage rails and the non-tennis
+ * sports populated. The real, fully-detailed racquets live in `./babolat.ts`.
  */
-export const products: Product[] = [
+const demoProducts: Product[] = [
   // ---- Tennis racquets -------------------------------------------------
   {
     id: "p-001",
@@ -479,8 +483,28 @@ export const products: Product[] = [
   },
 ];
 
+/** Real racquets first so they lead every tennis rail and listing. */
+export const products: Product[] = [...babolatRacquets, ...demoProducts];
+
 export const byCategory = (c: Product["category"]) =>
   products.filter((p) => p.category === c);
+
+export const bySport = (s: Product["sport"]) => products.filter((p) => p.sport === s);
+
+export const inCategory = (s: Product["sport"], c: Product["category"]) =>
+  products.filter((p) => p.sport === s && p.category === c);
+
+export const findProduct = (s: string, c: string, slug: string) =>
+  products.find((p) => p.sport === s && p.category === c && p.slug === slug);
+
+/** Only products with real photography and a spec sheet get a detail page. */
+export const detailedProducts = products.filter((p) => Boolean(p.specs?.length));
+
+export const relatedTo = (p: Product, n = 4) =>
+  products
+    .filter((x) => x.id !== p.id && x.sport === p.sport && x.category === p.category)
+    .sort((a, b) => Number(Boolean(b.specs)) - Number(Boolean(a.specs)) || b.rating - a.rating)
+    .slice(0, n);
 
 export const brandNames = [
   "Yonex",

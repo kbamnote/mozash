@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Heart, Check, Plus } from "lucide-react";
 import type { Product } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -44,16 +45,29 @@ export function ProductCard({ product: p, className }: { product: Product; class
         </button>
 
         <Link href={href} tabIndex={-1} aria-hidden className="absolute inset-0 grid place-items-center">
-          <GearArt
-            art={p.art}
-            accent={p.colours[1] ?? p.colours[0] ?? "#D7FF3A"}
-            className={cn(
-              "h-[86%] w-auto transition-transform duration-[700ms] ease-[var(--ease-out-expo)]",
-              p.inStock
-                ? "text-navy-900 group-hover:scale-[1.045]"
-                : "text-navy-900/30 grayscale"
-            )}
-          />
+          {p.images?.[0] ? (
+            <Image
+              src={p.images[0]}
+              alt=""
+              fill
+              sizes="(max-width: 640px) 72vw, (max-width: 1024px) 30vw, 24vw"
+              className={cn(
+                "object-contain p-5 transition-transform duration-[700ms] ease-[var(--ease-out-expo)]",
+                p.inStock ? "group-hover:scale-[1.045]" : "opacity-50 grayscale"
+              )}
+            />
+          ) : (
+            <GearArt
+              art={p.art}
+              accent={p.colours[1] ?? p.colours[0] ?? "#D7FF3A"}
+              className={cn(
+                "h-[86%] w-auto transition-transform duration-[700ms] ease-[var(--ease-out-expo)]",
+                p.inStock
+                  ? "text-navy-900 group-hover:scale-[1.045]"
+                  : "text-navy-900/30 grayscale"
+              )}
+            />
+          )}
         </Link>
 
         {!p.inStock && (

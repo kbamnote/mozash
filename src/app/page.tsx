@@ -1,8 +1,3 @@
-import { AnnouncementBar } from "@/components/layout/announcement-bar";
-import { SiteHeader } from "@/components/layout/site-header";
-import { SiteFooter } from "@/components/layout/site-footer";
-import { MobileTabBar } from "@/components/layout/mobile-tab-bar";
-
 import { Hero } from "@/components/sections/hero";
 import { TrustBar } from "@/components/sections/trust-bar";
 import { ShopBySport } from "@/components/sections/shop-by-sport";
@@ -51,9 +46,6 @@ const itemListLd = {
 export default function HomePage() {
   return (
     <>
-      <AnnouncementBar />
-      <SiteHeader />
-
       {/* The hero carries the page's single h1. */}
       <main className="flex-1 pb-[62px] lg:pb-0">
         <Hero />
@@ -66,9 +58,6 @@ export default function HomePage() {
         <Guides />
         <Reviews />
       </main>
-
-      <SiteFooter />
-      <MobileTabBar />
 
       <script
         type="application/ld+json"

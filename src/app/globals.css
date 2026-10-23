@@ -176,6 +176,34 @@
   @media (width >= 80rem) { padding-inline: 3rem; }
 }
 
+@layer components {
+  /* Price slider — native range styled to the brand accent. */
+  .range-volt {
+    appearance: none;
+    height: 6px;
+    border-radius: 999px;
+    background: var(--color-line);
+    outline-offset: 4px;
+  }
+  .range-volt::-webkit-slider-thumb {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 999px;
+    background: var(--color-volt-500);
+    border: 2px solid var(--color-navy-900);
+    cursor: pointer;
+  }
+  .range-volt::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 999px;
+    background: var(--color-volt-500);
+    border: 2px solid var(--color-navy-900);
+    cursor: pointer;
+  }
+}
+
 @keyframes marquee-x {
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }

@@ -5,7 +5,11 @@ const nextConfig: NextConfig = {
   partialPrefetching: true,
   images: {
     // Demo photography only. Replace with the client's own CDN before launch.
-    remotePatterns: [{ protocol: "https", hostname: "images.pexels.com" }],
+    remotePatterns: [
+      { protocol: "https", hostname: "images.pexels.com" },
+      // Babolat's India store CDN — real product photography for the demo.
+      { protocol: "https", hostname: "static.wixstatic.com" },
+    ],
     formats: ["image/avif", "image/webp"],
   },
   turbopack: {

@@ -15,12 +15,27 @@ export type SpecProfile = {
   manoeuvrability: number;
 };
 
+export type SpecRow = { label: string; value: string };
+
 export type Product = {
   id: string;
   slug: string;
   brand: string;
   name: string;
   year?: number;
+  /**
+   * Fields below are only populated for the products that have a real detail
+   * page. The invented demo catalogue leaves them undefined and falls back to
+   * the drawn GearArt + the one-line `spec` string.
+   */
+  images?: string[];
+  specs?: SpecRow[];
+  description?: string;
+  highlights?: string[];
+  gripSizes?: string[];
+  /** Numeric facets the listing filters work on. */
+  headSizeIn?: number;
+  weightG?: number;
   sport: SportId;
   category: Category;
   price: number;

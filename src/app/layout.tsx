@@ -1,6 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import { Archivo, Inter } from "next/font/google";
 import { site } from "@/lib/site";
+import { AnnouncementBar } from "@/components/layout/announcement-bar";
+import { SiteHeader } from "@/components/layout/site-header";
+import { SiteFooter } from "@/components/layout/site-footer";
+import { MobileTabBar } from "@/components/layout/mobile-tab-bar";
 import "./globals.css";
 
 const archivo = Archivo({
@@ -111,7 +115,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en-IN" className={`${archivo.variable} ${inter.variable} h-full`}>
       <body className="flex min-h-full flex-col antialiased">
+        <AnnouncementBar />
+        <SiteHeader />
         {children}
+        <SiteFooter />
+        <MobileTabBar />
         <script
           type="application/ld+json"
           // Static, author-controlled payload — no user input is interpolated.

@@ -9,7 +9,8 @@ const tabs = [
   { icon: LayoutGrid, label: "Categories", href: "/shop" },
   { icon: Search, label: "Search", href: "/search" },
   { icon: Heart, label: "Wishlist", href: "/wishlist" },
-  { icon: ShoppingBag, label: "Cart", href: "/cart", count: 2 },
+  // keep in step with CART_COUNT in site-header.tsx
+  { icon: ShoppingBag, label: "Cart", href: "/cart", count: 3 },
 ];
 
 export function MobileTabBar() {
